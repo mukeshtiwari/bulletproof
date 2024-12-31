@@ -18,7 +18,6 @@ section bulletproofdefinition
     [Field F] [DecidableEq F]
     [Module F G]
 
-
   /-
   (Logarithmic size) proof for inner product argument.
   -/
@@ -35,7 +34,6 @@ section bulletproofdefinition
   def pedersen_commitment (g h : G) (m r : F) : G :=
     m • g + r • h
 
-
   /-
     Committing a vector of Group elements to a vector of group elements.
   -/
@@ -50,10 +48,6 @@ section bulletproofdefinition
   def inner_product (a b : Vector F n) : F :=
     Array.foldl (fun acc (ab : F × F) ↦ acc + ab.1 * ab.2) (0 : F)
       (Array.zipWith a.toArray b.toArray (fun ai bi => (ai, bi)))
-
-
-
-
 
 /-
 
