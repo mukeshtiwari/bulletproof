@@ -44,9 +44,6 @@ section bulletproofdefinition
       (Array.zipWith a.toArray b.toArray (fun ai bi => (ai, bi)))
 
 
-  def compute_second_diagonal_vector {n : Nat} (g : Vector G (2^(n + 1)))
-    (a : Vector F (2^(n + 1))) : G × G := (0, 0) -- dummy definition
-
 
 /-
 
