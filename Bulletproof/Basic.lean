@@ -22,7 +22,8 @@ section bulletproofdefinition
 
 
   /-
-   Pedersen commitment abstracted in vector space notation. (It closely matches with Elliptic curve notation)
+   Pedersen commitment abstracted in vector space notation.
+   (It closely matches with Elliptic curve notation)
   -/
   def pedersen_commitment (g h : G) (m r : F) : G :=
     m • g + r • h
@@ -32,8 +33,19 @@ section bulletproofdefinition
   -/
   def pedersen_commitment_vector {n : Nat} (g : Vector G n)
     (h : G) (m : Vector F n) (r : F) : G :=
-     Array.foldl (fun acc ((mi, gi) : F × G) => acc + mi • gi)
+     Array.foldl (fun acc ((mi, gi) : F × G) ↦ acc + mi • gi)
      (r • h) (Array.zipWith m.toArray g.toArray (fun mi gi => (mi, gi)))
+
+  /-
+    Inner product of two scalors vectors.
+  -/
+  def inner_product (a b : Vector F n) : F :=
+    Array.foldl (fun acc (ab : F × F) ↦ acc + ab.1 * ab.2) (0 : F)
+      (Array.zipWith a.toArray b.toArray (fun ai bi => (ai, bi)))
+
+
+  def compute_second_diagonal_vector {n : Nat} (g : Vector G (2^(n + 1)))
+    (a : Vector F (2^(n + 1))) : G × G := (0, 0) -- dummy definition
 
 
 /-
