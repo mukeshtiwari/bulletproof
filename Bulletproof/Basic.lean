@@ -1,10 +1,17 @@
 /- some mathlib, batteries, aesop imports -/
 import Aesop
 import Mathlib
-import Batteries.Data.Vector
+import Batteries
 
+open Mathlib
 open Batteries
 /- here goes definition of bulletproof -/
+
+
+
+
+
+end pedersen
 section bulletproofdefinition
 
 
@@ -13,8 +20,25 @@ section bulletproofdefinition
     [Field F] [DecidableEq F]
     [Module F G]
 
-  /- this function encodes inner product argument -/
+
   /-
+   Pedersen commitment abstracted in vector space notation. (It closely matches with Elliptic curve notation)
+  -/
+  def pedersen_commitment (g h : G) (m r : F) : G :=
+    m • g + r • h
+
+  /-
+    Committing a vector of Group elements to a vector of group elements.
+  -/
+  def pedersen_commitment_vector {n : Nat} (g : Vector G n)
+    (h : G) (m : Vector F n) (r : F) : G :=
+     Array.foldl (fun acc ((mi, gi) : F × G) => acc + mi • gi)
+     (r • h) (Array.zipWith m.toArray g.toArray (fun mi gi => (mi, gi)))
+
+
+/-
+
+This function encodes inner product argument
 
 The inputs to the inner-product argument are independent generators g, h : Vector G n, a
 scalar c : Zp, and P : G. The argument lets the prover convince a verifier that the
@@ -29,6 +53,7 @@ P is the public commitment that the prover wants to prove knowledge of the discr
 
 More precisely, we design a proof system for the relation defined by the following predicate:
 {(g h : Vector G n) (u : G) (P : G) (a b : Vector F n) | P = g^a * h^b . u^<a.b>}
+
 -/
   def innerproduct_argument {n : Nat} (a b : Vector F (2^n))
     (g h : Vector G (2^n))  (u P : G) : Prop := True -- dummy definition
