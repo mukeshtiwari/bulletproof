@@ -3,15 +3,13 @@ import Aesop
 import Mathlib
 import Batteries
 
+
 open Mathlib
 open Batteries
+
+
+
 /- here goes definition of bulletproof -/
-
-
-
-
-
-end pedersen
 section bulletproofdefinition
 
 
@@ -22,11 +20,21 @@ section bulletproofdefinition
 
 
   /-
+  (Logarithmic size) proof for inner product argument.
+  -/
+  structure InnerProductProof where
+    L : Vector G n
+    R : Vector G n
+    a : F
+    b : F
+
+  /-
    Pedersen commitment abstracted in vector space notation.
    (It closely matches with Elliptic curve notation)
   -/
   def pedersen_commitment (g h : G) (m r : F) : G :=
     m • g + r • h
+
 
   /-
     Committing a vector of Group elements to a vector of group elements.
@@ -43,17 +51,10 @@ section bulletproofdefinition
     Array.foldl (fun acc (ab : F × F) ↦ acc + ab.1 * ab.2) (0 : F)
       (Array.zipWith a.toArray b.toArray (fun ai bi => (ai, bi)))
 
-  /-
-  (Logarithmic size) proof for inner product argument.
-  -/
-  structure InnerProductProof where
-    L : Vector G n
-    R : Vector G n
-    a : F
-    b : F
 
 
-  #print InnerProductProof
+
+
 /-
 
 This function encodes inner product argument
@@ -77,3 +78,35 @@ More precisely, we design a proof system for the relation defined by the followi
     (g h : Vector G (2^n))  (u P : G) : Prop := True -- dummy definition
 
 end bulletproofdefinition
+
+
+section proofs
+
+  variable {G : Type*} {F : Type*}
+    [AddCommGroup G] [DecidableEq G]
+    [Field F] [DecidableEq F]
+    [Module F G]
+
+  theorem pedersen_commitment_homomorphism (g h : G) (m₁ m₂ r₁ r₂ : F) :
+    pedersen_commitment g h (m₁ + m₂) (r₁ + r₂) =
+    pedersen_commitment g h m₁ r₁ + pedersen_commitment g h m₂ r₂ :=
+    by
+      simp [pedersen_commitment]
+      ring_nf
+      sorry 
+
+  /-
+    The inner product argument is a proof system for the relation defined by the following predicate:
+    {(g h : Vector G n) (u : G) (P : G) (a b : Vector F n) | P = g^a * h^b . u^<a.b>}
+  -/
+  /- completeness
+  theorem inner_product_argument_soundness {n : Nat} (a b : Vector F (2^n))
+    (g h : Vector G (2^n))  (u P : G) :
+    innerproduct_argument a b g h u P →
+    ∃ (L R : Vector G n) (a b : F), InnerProductProof L R a b :=
+    by
+      intro h
+      trivial
+  -/
+
+end proofs
