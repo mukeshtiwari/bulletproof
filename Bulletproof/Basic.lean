@@ -74,8 +74,8 @@ More precisely, we design a proof system for the relation defined by the followi
 {(g h : Vector G n) (u : G) (P : G) (a b : Vector F n) | P = g^a * h^b . u^<a.b>}
 
 -/
-  def innerproduct_argument {n : Nat} (a b : Vector F (2^n))
-    (g h : Vector G (2^n))  (u P : G) : Prop := True -- dummy definition
+  def innerproduct_argument {n : Nat} (a b : Vector F n)
+    (g h : Vector G n)  (u P : G) : Prop := True -- dummy definition
 
 end bulletproofdefinition
 
@@ -93,7 +93,7 @@ section proofs
     by
       simp [pedersen_commitment]
       ring_nf
-      sorry 
+      sorry
 
   /-
     The inner product argument is a proof system for the relation defined by the following predicate:
