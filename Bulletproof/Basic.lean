@@ -31,7 +31,7 @@ section bulletproofdefinition
   /-
     Committing a vector of Group elements to a vector of group elements.
   -/
-  def pedersen_commitment_vector {n : Nat} (g : Vector G n)
+  def pedersen_commitment_vector (g : Vector G n)
     (h : G) (m : Vector F n) (r : F) : G :=
      Array.foldl (fun acc ((mi, gi) : F × G) ↦ acc + mi • gi)
      (r • h) (Array.zipWith m.toArray g.toArray (fun mi gi => (mi, gi)))
@@ -43,8 +43,17 @@ section bulletproofdefinition
     Array.foldl (fun acc (ab : F × F) ↦ acc + ab.1 * ab.2) (0 : F)
       (Array.zipWith a.toArray b.toArray (fun ai bi => (ai, bi)))
 
+  /-
+  (Logarithmic size) proof for inner product argument.
+  -/
+  structure InnerProductProof where
+    L : Vector G n
+    R : Vector G n
+    a : F
+    b : F
 
 
+  #print InnerProductProof
 /-
 
 This function encodes inner product argument
