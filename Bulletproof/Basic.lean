@@ -37,7 +37,7 @@ section bulletproofdefinition
   /-
     Committing a vector of Group elements to a vector of group elements.
   -/
-  def pedersen_commitment_vector (g : Vector G n)
+  def pedersen_vector_commitment (g : Vector G n)
     (h : G) (m : Vector F n) (r : F) : G :=
      Array.foldl (fun acc ((mi, gi) : F × G) ↦ acc + mi • gi)
      (r • h) (Array.zipWith m.toArray g.toArray (fun mi gi => (mi, gi)))
@@ -45,9 +45,18 @@ section bulletproofdefinition
   /-
     Inner product of two scalors vectors.
   -/
-  def inner_product (a b : Vector F n) : F :=
+  def scalor_inner_product (a b : Vector F n) : F :=
     Array.foldl (fun acc (ab : F × F) ↦ acc + ab.1 * ab.2) (0 : F)
       (Array.zipWith a.toArray b.toArray (fun ai bi => (ai, bi)))
+
+  /- compute the dot product of two scalors (vectors) -/
+  def scalor_dot_product (a b : Vector F n) : Vector F n :=
+    Vector.zipWith a b (fun ai bi => ai * bi)
+
+  /- Hadamard product -/
+  def hadamard_product (a b : Vector (Vector F n) n) : Vector F n :=
+    Vector.zipWith a b (fun ai bi => scalor_inner_product ai bi)
+
 
 /-
 
